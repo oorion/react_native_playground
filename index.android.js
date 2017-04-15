@@ -1,9 +1,3 @@
-  /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -12,6 +6,7 @@ import {
   Image,
   Text,
   TextInput,
+  Button,
 } from 'react-native';
 
 
@@ -20,6 +15,7 @@ class AwesomeProject extends Component {
     super(props);
     this.state = {
       imageUrl: 'test.com',
+      imageIndex: 0
     };
   }
 
@@ -30,6 +26,11 @@ class AwesomeProject extends Component {
       <View style={{flex: 1}}>
         <Text style={{fontWeight: 'bold', backgroundColor: 'powderblue'}}>{this.state.imageTitle}</Text>
         <Image source={{uri: this.state.imageUrl}} style={{flex: 5}}/>
+        <Button
+          onPress={this.goToNextPage.bind(this)}
+          title="Next"
+          color="green"
+        />
       </View>
     )
   }
@@ -40,14 +41,18 @@ class AwesomeProject extends Component {
       .then((responseJson) => {
         this.setState(
           {
-            imageUrl: responseJson.data.children[0].data.preview.images[0].source.url,
-            imageTitle: responseJson.data.children[0].data.title,
+            imageUrl: responseJson.data.children[this.state.imageIndex].data.preview.images[0].source.url,
+            imageTitle: responseJson.data.children[this.state.imageIndex].data.title,
           }
         );
       })
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  goToNextPage = function() {
+    this.setState({imageIndex: this.state.imageIndex + 1});
   }
 }
 
